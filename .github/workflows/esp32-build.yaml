@@ -103,7 +103,11 @@ jobs:
     - name: "Git config safe.directory for codeql"
       run: git config --global --add safe.directory /__w/AtomVM/AtomVM
 
+    # CodeQL analyzes the same sources in every matrix entry, so like
+    # stm32-build.yaml run it only on the two esp32 v5.5.5 builds: without
+    # JIT (which also enables PPP) and with JIT.
     - name: "Initialize CodeQL"
+      if: matrix.esp-idf-target == 'esp32' && matrix.idf-version == 'v5.5.5'
       uses: github/codeql-action/init@v4
       with:
         languages: "cpp"
@@ -168,6 +172,7 @@ jobs:
         idf.py size-components
 
     - name: "Perform CodeQL Analysis"
+      if: matrix.esp-idf-target == 'esp32' && matrix.idf-version == 'v5.5.5'
       uses: github/codeql-action/analyze@v4
 
     - name: Install dependencies to build host AtomVM and run qemu
