@@ -490,7 +490,7 @@ jobs:
     # Setup
     - name: "Set CFLAGS"
       run: |
-        if [ $"CFLAGS" = "" ]; then
+        if [ -z "$CFLAGS" ]; then
             echo "CFLAGS=$DEFAULT_CFLAGS" >> $GITHUB_ENV
             echo "CXXFLAGS=$DEFAULT_CFLAGS" >> $GITHUB_ENV
         fi
