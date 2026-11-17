@@ -163,7 +163,10 @@ jobs:
     - name: "Git config safe.directory for codeql"
       run: git config --global --add safe.directory /__w/AtomVM/AtomVM
 
+    # CodeQL analyzes the same sources in every matrix entry, so like
+    # stm32-build.yaml run it only on the pico_w (Arm) builds, with and without JIT.
     - name: "Initialize CodeQL"
+      if: matrix.board == 'pico_w' && matrix.platform == ''
       uses: github/codeql-action/init@v4
       with:
         languages: "cpp"
@@ -181,6 +184,7 @@ jobs:
         cmake --build . --target=AtomVM
 
     - name: "Perform CodeQL Analysis"
+      if: matrix.board == 'pico_w' && matrix.platform == ''
       uses: github/codeql-action/analyze@v4
 
     - name: Install nvm and nodejs 20
